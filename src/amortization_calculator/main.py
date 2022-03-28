@@ -47,23 +47,23 @@ def main() -> None:
             else:
                 amortization_percentage = 0
 
-            print(f"New year ({month_counter/12:.0f}), recalculating amortization percentage. ", end="")
+            print(f"\nYear ({month_counter/12:.0f}). ", end="")
+            print(
+                f"The loan / house price ratio is: {(loan/house_price)*100:.0f}%. ",
+                end="",
+            )
             debt_quota = loan / yearly_income
             print(f"Debt quota is: {debt_quota:.2f}. ", end="")
 
             if debt_quota > 4.5:
                 amortization_percentage += 1
-                print(f"Amortization percentage increased by 1% to {amortization_percentage}%.", end="")
-            else:
-                print(f"Amortization percentage is {amortization_percentage}%.", end="")
-            print()
+            print(f"--> Minimum required amortization is {amortization_percentage}%.")
 
-            if amortization_percentage == 0:
-                if args.stop_amortizing:
-                    print(
-                        "Your loan is down to 50% of the house's value and your debt quota is <4.5. You have opted to stop amortizing!"
-                    )
-                    break
+            if amortization_percentage == 0 and args.stop_amortizing:
+                print(
+                    "Your loan is down to 50% of the house's value and your debt quota is <4.5. You have opted to stop amortizing!"
+                )
+                break
 
         loan_payment = (loan * (amortization_percentage / 100)) / 12
         loan_payment = max(loan_payment, args.minimum_amortization) if args.minimum_amortization else loan_payment
