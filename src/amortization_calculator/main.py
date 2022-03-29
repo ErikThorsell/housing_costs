@@ -31,6 +31,9 @@ def main() -> None:
 
     loan = house_price - down_payment
 
+    print(f"Monthly income: {monthly_income} | Yearly income: {yearly_income}")
+    print(f"House price: {house_price} | Loan: {loan} | Down payment: {down_payment} | Interest: {interest}")
+
     tot_interest_payment = 0
 
     month_counter = 0
