@@ -15,6 +15,13 @@ def _parse_args():
     )
     parser.add_argument("--minimum-amortization", type=int, help="If specified, the minimum amortization per month.")
     parser.add_argument("--years", type=int, default=60, help="Number of years to calculate for.")
+    parser.add_argument("--pantbrev", type=int, help="Current amount that is accounted for by existing pantbrev.")
+    parser.add_argument(
+        "--running-cost",
+        type=int,
+        default=0,
+        help="Estimated, monthly, cost for electricity, water, heating, insurances, etc.",
+    )
     return parser.parse_args()
 
 
@@ -33,6 +40,13 @@ def main() -> None:
 
     print(f"Monthly income: {monthly_income} | Yearly income: {yearly_income}")
     print(f"House price: {house_price} | Loan: {loan} | Down payment: {down_payment} | Interest: {interest}")
+    print(f"Lagfart: {house_price*0.015:.0f}", end="")
+    if args.pantbrev:
+        print(
+            f"| Pantbrev: {(house_price - args.pantbrev)*0.02:.0f} | Sum: {house_price*0.015 + (house_price-args.pantbrev)*0.02:.0f}",
+            end="",
+        )
+    print()
 
     tot_interest_payment = 0
 
@@ -81,7 +95,7 @@ def main() -> None:
 
         loan -= loan_payment
         print(
-            f"Month: {month_counter:3} | Interest: {interest_payment:5.0f}, Amortization ({amortization_percentage}%): {loan_payment:5.0f} | Monthly payment: {interest_payment + loan_payment:7.0f} | Remaining debt: {loan:7.0f}, Total interest: {tot_interest_payment:7.0f}"
+            f"Month: {month_counter:3} | Interest: {interest_payment:5.0f}, Amortization ({amortization_percentage}%): {loan_payment:5.0f} | Monthly payment: {interest_payment + loan_payment + args.running_cost:7.0f} | Remaining debt: {loan:7.0f}, Total interest: {tot_interest_payment:7.0f}"
         )
 
         if loan < 0:
